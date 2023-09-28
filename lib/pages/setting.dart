@@ -1,3 +1,4 @@
+import 'package:catat_duit/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -107,7 +108,7 @@ class _SettingPageState extends State<SettingPage> {
                           _updatePassword;
                           Navigator.of(context)
                               .push(MaterialPageRoute(
-                            builder: (context) => const SettingPage(),
+                            builder: (context) => const LoginPage(),
                           ))
                               .then((value) {
                             setState(() {});

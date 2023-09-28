@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 FutureBuilder(
                                     future: database
-                                        .getTotalIncomeByCategoryRepo(2),
+                                        .getTotalExpenseByCategoryRepo(2),
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
