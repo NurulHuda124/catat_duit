@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:catat_duit/models/category.dart';
 import 'package:catat_duit/models/transaction.dart';
 import 'package:catat_duit/models/transaction_with_category.dart';
-import 'package:catat_duit/models/user.dart';
 import 'package:drift/drift.dart';
 // These imports are used to open the database
 import 'package:drift/native.dart';
@@ -15,55 +14,13 @@ part 'database.g.dart';
 @DriftDatabase(
   // relative import for the drift file. Drift also supports `package:`
   // imports
-  tables: [Categories, Transactions, Users],
+  tables: [Categories, Transactions],
 )
 class AppDb extends _$AppDb {
   AppDb() : super(_openConnection());
 
   @override
   int get schemaVersion => 6;
-
-  //LOGIN
-  Future<Map<String, dynamic>?> getUserDataFromDatabase(String username) async {
-    // Query database untuk mencari data pengguna berdasarkan username
-    final query = customSelect(
-      'SELECT username, password FROM users WHERE username = :username',
-      variables: [Variable.withString(username)],
-    ).map((row) {
-      return {
-        // ignore: deprecated_member_use
-        'username': row.readString('username'),
-        // ignore: deprecated_member_use
-        'password': row.readString('password'),
-      };
-    });
-
-    // Ambil data pengguna
-    final userData = await query.getSingleOrNull();
-
-    return userData;
-  }
-
-  // Fungsi untuk memverifikasi password saat ini
-  Future<bool> verifyCurrentPassword(String currentPassword) async {
-    final userData = await getUserDataFromDatabase(
-        'user'); // 'user' adalah username yang tetap untuk pengguna default
-
-    // Jika userData null, username 'user' tidak ditemukan di database
-    if (userData == null) {
-      return false;
-    }
-
-    final savedPassword = userData['password'] as String;
-
-    // Bandingkan password saat ini yang dimasukkan dengan password di database
-    return savedPassword == currentPassword;
-  }
-
-  Future<void> updateUserData(String username, String newPassword) async {
-    await (update(users)..where((tbl) => tbl.username.equals(username)))
-        .write(UsersCompanion(password: Value(newPassword)));
-  }
 
   //CRUD category
 
